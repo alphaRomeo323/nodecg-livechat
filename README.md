@@ -24,7 +24,7 @@ In your terminal, please navigate to your root NodeCG folder. Then execute the c
 
 ![dashboard](https://cdn.discordapp.com/attachments/636576061932699650/1096524261977497681/Screenshot_20230415_045541.png)
 
-- Radio Button: Choose which ID to use to start LiveChat 
+- Radio button: Choose which ID to use to start LiveChat 
 
   - Channel Id: Recomended
 
@@ -36,7 +36,7 @@ In your terminal, please navigate to your root NodeCG folder. Then execute the c
 
 Replicant name is `chat`
 
-```json
+```js
 {
   author: 'hogehoge',
   avatar: 'https://yt4.ggpht.com/...',
