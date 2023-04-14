@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Youtube-Chat</title>
+        <style>
+            button {
+            font-size: large;
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <label>
+                <input type="radio" name="id" value="channel"> Channel Id: <input type="text" id="channel-id" name="channel-id" size="20">
+            </label>
+        </section>
+        <section>
+            <label>
+                <input type="radio" name="id" value="live"> Live Id: <input type="text" id="live-id" name="live-id" size="20">
+            </label>
+        </section>
+        <button id="control"><span id="is-active"></span></button>
+    </body>
+    <script>
+        const activeRep = nodecg.Replicant("youtube-active");
+        const channelIdRep = nodecg.Replicant("youtube-channel-id");
+        const liveIdRep = nodecg.Replicant("youtube-live-id");
+        const selectorRep = nodecg.Replicant("youtube-id-selector");
+        const controlButton = document.getElementById("control");
+        const isActive = document.getElementById("is-active");
+        const idSelector = document.getElementsByName("id");
+        const channelIdElm = document.getElementById("channel-id");
+        const liveIdElm = document.getElementById("live-id")
+
+        
+
+        NodeCG.waitForReplicants(activeRep, channelIdRep, liveIdRep, selectorRep).then(() => {
+
+            controlButton.onclick = () => {
+                if(activeRep.value){
+                    activeRep.value = false;
+                }else{
+                    activeRep.value = true;
+                    channelIdRep.value = channelIdElm.value;
+                    liveIdRep.value = liveIdElm.value;
+                }
+            }
+
+            for (let target of idSelector) {
+                target.addEventListener(`change`, () => {
+                    selectorRep.value = target.value;
+                })
+            }
+
+            selectorRep.on("change", (newValue) => {
+                idSwitch();
+            })
+
+            activeRep.on("change", (newValue) => {
+                channelIdElm.value = channelIdRep.value;
+                liveIdElm.value = liveIdRep.value;
+                if(activeRep.value){
+                    isActive.innerText = "Stop";
+                    idSelector.forEach(element => {
+                        element.disabled = true;
+                    });
+                    channelIdElm.disabled = true;
+                    liveIdElm.disabled = true;
+                }
+                else{
+                    isActive.innerText = "Start";
+                    idSelector.forEach(element => {
+                        element.disabled = false;
+                    });
+                    idSwitch();
+                }
+            })
+
+    
+        })
+
+        const idSwitch = () => {
+            if (selectorRep.value === "channel"){
+                channelIdElm.disabled = false;
+                liveIdElm.disabled = true;
+                
+            }
+            else if (selectorRep.value === "live"){
+                channelIdElm.disabled = true;
+                liveIdElm.disabled = false;
+            }
+            for (let target of idSelector) {
+                    if (target.value === selectorRep.value){
+                        target.checked = true;
+                    }
+            }
+
+        }
+
+    </script>
+</html>
