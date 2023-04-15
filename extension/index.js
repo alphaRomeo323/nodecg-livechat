@@ -48,7 +48,6 @@ module.exports = async function (nodecg) {
                     message: chatItem.message,
                     platform: "youtube"
                 }
-                console.log(chatRep.value);
             }
         })
         activeRep.on("change", (newValue) => {
