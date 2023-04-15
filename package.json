@@ -1,12 +1,12 @@
 {
     "name": "nodecg-livechat",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "description": "Youtube Live Chat Streamer on NodeCG",
     "author": "alphaRomeo323",
     "homepage": "https://github.com/alphaRomeo323/nodecg-livechat",
     "license": "MIT",
     "nodecg": {
-        "compatibleRange": "^1.0.0",
+        "compatibleRange": "^2.0.0",
         "dashboardPanels": [
             {
                 "width": "3",
