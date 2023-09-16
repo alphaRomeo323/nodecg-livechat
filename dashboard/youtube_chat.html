@@ -6,6 +6,10 @@
         <style>
             button {
             font-size: large;
+            width: 4rem;
+            }
+            .error {
+                color: red;
             }
         </style>
     </head>
@@ -20,30 +24,33 @@
                 <input type="radio" name="id" value="live"> Live Id: <input type="text" id="live-id" name="live-id" size="20">
             </label>
         </section>
-        <button id="control"><span id="is-active"></span></button>
+        <section>
+            <button id="control"><span id="is-active"></span></button>
+            <span id="log"></span>
+        </section>
     </body>
     <script>
         const activeRep = nodecg.Replicant("youtube-active");
         const channelIdRep = nodecg.Replicant("youtube-channel-id");
         const liveIdRep = nodecg.Replicant("youtube-live-id");
         const selectorRep = nodecg.Replicant("youtube-id-selector");
+        const logRep = nodecg.Replicant("youtube-connection-log");
         const controlButton = document.getElementById("control");
         const isActive = document.getElementById("is-active");
         const idSelector = document.getElementsByName("id");
         const channelIdElm = document.getElementById("channel-id");
-        const liveIdElm = document.getElementById("live-id")
+        const liveIdElm = document.getElementById("live-id");
+        const logElm = document.getElementById("log");
 
-        
-
-        NodeCG.waitForReplicants(activeRep, channelIdRep, liveIdRep, selectorRep).then(() => {
+        NodeCG.waitForReplicants(activeRep, channelIdRep, liveIdRep, selectorRep, logRep).then(() => {
 
             controlButton.onclick = () => {
                 if(activeRep.value){
                     activeRep.value = false;
                 }else{
-                    activeRep.value = true;
                     channelIdRep.value = channelIdElm.value;
                     liveIdRep.value = liveIdElm.value;
+                    activeRep.value = true;
                 }
             }
 
@@ -74,6 +81,15 @@
                         element.disabled = false;
                     });
                     idSwitch();
+                }
+            })
+            logRep.on("change", (newValue) => {
+                logElm.innerText = newValue.content;
+                if(newValue.level === "error"){
+                    logElm.classList.add("error")
+                }
+                else{
+                    logElm.classList.remove("error")
                 }
             })
 
