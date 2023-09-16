@@ -35,7 +35,7 @@ module.exports = async function (nodecg) {
         liveChat.on("start", (liveId) => {
             nodecg.log.info("Youtube-chat is active")
         })
-        liveChat.on("stop", (reason) => {
+        liveChat.on("end", (reason) => {
             nodecg.log.info("Youtube-chat is stopped")
         })
     
