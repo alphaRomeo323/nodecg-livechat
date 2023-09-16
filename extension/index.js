@@ -48,7 +48,7 @@ module.exports = async function (nodecg) {
                 level: "error"
             }
             if(
-                err.message.includes("Continuation was not found") 
+                err.message.includes("not found") 
                 || err.message.includes("Cannot read properties of undefined") 
             ){
                 activeRep.value = false
