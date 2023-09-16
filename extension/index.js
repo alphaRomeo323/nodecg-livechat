@@ -41,7 +41,7 @@ module.exports = async function (nodecg) {
         }
     }
 
-    const liveChatSeq = ( liveChat , count , activeDate) => {
+    const liveChatSeq = ( liveChat , count ) => {
         liveChat.on("error", (err) => {
             nodecg.log.error(err);
             console.log(err)
