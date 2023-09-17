@@ -29,13 +29,13 @@ module.exports = async function (nodecg) {
         if (selectorRep.value === "channel" && channelIdRep !== ""){
             const liveChat = new LiveChat({channelId: channelIdRep.value});
             liveChat.start();
-            liveChatSeq(liveChat, count);
+            liveChatSeq(liveChat);
             
         }
         else if (selectorRep.value === "live" && liveIdRep !== ""){
             const liveChat = new LiveChat({liveId: liveIdRep.value});
             liveChat.start();
-            liveChatSeq(liveChat, count);
+            liveChatSeq(liveChat);
         }
     }
 
