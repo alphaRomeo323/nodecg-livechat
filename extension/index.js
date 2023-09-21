@@ -29,34 +29,36 @@ module.exports = async function (nodecg) {
         if (selectorRep.value === "channel" && channelIdRep !== ""){
             const liveChat = new LiveChat({channelId: channelIdRep.value});
             liveChat.start();
-            liveChatSeq(liveChat, count);
+            liveChatSeq(liveChat);
             
         }
         else if (selectorRep.value === "live" && liveIdRep !== ""){
             const liveChat = new LiveChat({liveId: liveIdRep.value});
             liveChat.start();
-            liveChatSeq(liveChat, count);
+            liveChatSeq(liveChat);
         }
     }
 
     const liveChatSeq = ( liveChat ) => {
 
         liveChat.on("error", (err) => {
-            nodecg.log.error(err);
-            logRep.value = {
-                content: err.message,
-                level: "error"
-            }
+            nodecg.log.error(err.message);
             if(
                 err.message.includes("not found") 
-                || err.message.includes("Cannot read properties of undefined") 
+                || err.message.includes("Cannot read properties of undefined")
+                || err.message.includes("404") 
             ){
+                logRep.value = {
+                    content: err.message,
+                    level: "error"
+                }
                 activeRep.value = false
             }
         })
     
         liveChat.on("start", (liveId) => {
-            nodecg.log.info("Youtube-chat is active")
+            nodecg.log.info("Youtube-chat is active!")
+            nodecg.log.info(`LiveId: ${liveId}`)
             logRep.value = {
                 content: "Active!",
                 level: "info"
@@ -64,7 +66,7 @@ module.exports = async function (nodecg) {
         })
         liveChat.on("end", (reason) => {
             if (activeRep.value === false){
-                nodecg.log.info("Youtube-chat is stopped");
+                nodecg.log.info("Youtube-chat is stopped.");
                 if (logRep.value.level === "info"){
                     logRep.value = {
                         content: "",
@@ -75,7 +77,7 @@ module.exports = async function (nodecg) {
             else{
                 activeDate = new Date()
                 setTimeout(() => {
-                    nodecg.log.info("Youtube-chat is trying reconnect.");
+                    nodecg.log.warn("Youtube-chat is trying reconnection.");
                     logRep.value = {
                         content: "Reconnecting...",
                         level: "info"
