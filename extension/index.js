@@ -1,20 +1,26 @@
 const { LiveChat } = require("youtube-chat")
+const tmi = require("tmi.js");
+const { node } = require("webpack");
 
 module.exports = async function (nodecg) {
-    const activeRep = nodecg.Replicant("youtube-active");
+    const youtubeActiveRep = nodecg.Replicant("youtube-active");
     const channelIdRep = nodecg.Replicant("youtube-channel-id");
     const liveIdRep = nodecg.Replicant("youtube-live-id");
     const selectorRep = nodecg.Replicant("youtube-id-selector");
     const logRep = nodecg.Replicant("youtube-connection-log");
+    const twitchChannelRep = nodecg.Replicant("twitch-channel-id");
+    const twitchActiveRep = nodecg.Replicant("twitch-active");
     const chatRep = nodecg.Replicant("chat");
+    
     let activeDate = new Date()
-    activeRep.value = false;
+    youtubeActiveRep.value = false;
+    twitchActiveRep.value = false;
     logRep.value = {
         content: "",
         level: "info"
     }
 
-    activeRep.on("change", (newValue) => {
+    youtubeActiveRep.on("change", (newValue) => {
         if (newValue === true){
             logRep.value = {
                 content: "connecting...",
@@ -52,7 +58,7 @@ module.exports = async function (nodecg) {
                     content: err.message,
                     level: "error"
                 }
-                activeRep.value = false
+                youtubeActiveRep.value = false
             }
         })
     
@@ -65,7 +71,7 @@ module.exports = async function (nodecg) {
             }
         })
         liveChat.on("end", (reason) => {
-            if (activeRep.value === false){
+            if (youtubeActiveRep.value === false){
                 nodecg.log.info("Youtube-chat is stopped.");
                 if (logRep.value.level === "info"){
                     logRep.value = {
@@ -99,9 +105,37 @@ module.exports = async function (nodecg) {
             }
         })
 
-        activeRep.on("change", (newValue) => {
+        youtubeActiveRep.on("change", (newValue) => {
             if (newValue === false){
                 liveChat.stop();
+            }
+        })
+    }
+
+    twitchActiveRep.on("change", (newValue) => {
+        if (newValue === true){
+            const client = new tmi.Client({
+                channels: [ twitchChannelRep.value ]
+            });
+            client.connect();
+            twitchClientSeq(client);
+            
+        }
+    })
+
+    const twitchClientSeq = ( client ) => {
+        client.on('message', (channel, tags, message, self) => {
+            chatRep.value = {
+                author: tags['display-name'],
+                avatar: "",
+                message: message,
+                platform: "twitch"
+            }
+    
+        });
+        twitchActiveRep.on("change", (newValue) => {
+            if (newValue === false){
+                client.disconnect()
             }
         })
     }
