@@ -1,6 +1,6 @@
 {
     "name": "nodecg-livechat",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "description": "Youtube Live Chat Streamer on NodeCG",
     "author": "alphaRomeo323",
     "homepage": "https://github.com/alphaRomeo323/nodecg-livechat",
@@ -10,13 +10,20 @@
         "dashboardPanels": [
             {
                 "width": "3",
-                "name": "chat",
+                "name": "youtube_chat",
                 "title": "Youtube-chat",
                 "file": "youtube_chat.html"
+            },
+            {
+                "width": "3",
+                "name": "twitch_chat",
+                "title": "Twitch-chat",
+                "file": "twitch_chat.html"
             }
         ]
     },
     "dependencies": {
+        "tmi.js": "^1.8.5",
         "youtube-chat": "^2.2.0"
     }
 }

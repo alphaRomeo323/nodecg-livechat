@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Youtube-Chat</title>
+        <style>
+            button {
+            font-size: large;
+            width: 4rem;
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <label>
+                <input type="radio" name="id" value="channel"> Channel Id: <input type="text" id="channel-id" name="channel-id" size="20">
+            </label>
+        </section>
+        <section>
+            <button id="control"><span id="is-active"></span></button>
+        </section>
+    </body>
+    <script>
+        const activeRep = nodecg.Replicant("twitch-active");
+        const channelIdRep = nodecg.Replicant("twitch-channel-id");
+        const controlButton = document.getElementById("control");
+        const isActive = document.getElementById("is-active");
+        const channelIdElm = document.getElementById("channel-id");
+
+        NodeCG.waitForReplicants(activeRep, channelIdRep).then(() => {
+
+            controlButton.onclick = () => {
+                if(activeRep.value){
+                    activeRep.value = false;
+                }else{
+                    channelIdRep.value = channelIdElm.value;
+                    activeRep.value = true;
+                }
+            }
+            activeRep.on("change", (newValue) => {
+                channelIdElm.value = channelIdRep.value;
+                channelIdElm.disabled = newValue;
+                if(activeRep.value){
+                    isActive.innerText = "Stop";
+                }
+                else{
+                    isActive.innerText = "Start";
+                }
+            })
+        })
+    </script>
+</html>
