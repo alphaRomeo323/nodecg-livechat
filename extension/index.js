@@ -1,6 +1,5 @@
 const { LiveChat } = require("youtube-chat")
 const tmi = require("tmi.js");
-const { node } = require("webpack");
 
 module.exports = async function (nodecg) {
     const youtubeActiveRep = nodecg.Replicant("youtube-active");
